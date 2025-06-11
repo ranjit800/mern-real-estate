@@ -1,6 +1,7 @@
 const Footer = () => {
   return (
-    <footer className="bg-[#0f172a] text-[#d1b989] py-10">
+    <footer className="bg-[#0f172a] text-[#d1b989] py-10 border-t-[1px] border-[#d1b989]">
+      
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* About */}
         <div>
@@ -32,7 +33,7 @@ const Footer = () => {
           <ul className="text-sm space-y-2">
             <li>Email: info@luxorarealty.com</li>
             <li>Phone: +91 8001801496</li>
-            <li>Address: Garbeta, West Bengal, India</li>
+            <li>Address: Kolkata, West Bengal, India</li>
           </ul>
         </div>
       </div>

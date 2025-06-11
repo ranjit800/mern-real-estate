@@ -8,13 +8,12 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-[#0f172a] shadow-md sticky top-0 z-50">
+    <header className="bg-[#0f172a] shadow-2xl sticky top-0 z-50">
       <div className="flex justify-between items-center max-w-7xl mx-auto px-4 ">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <img src={logo} alt="Luxora Realty Logo" className="h-20 object-contain" />
         </Link>
-
         {/* Search Bar */}
         <form className="bg-[#f1f5f9] rounded-full px-3 py-2 items-center hidden sm:flex w-32 sm:w-64 md:w-80 focus-within:ring-2 focus-within:ring-[#d1b989] transition">
           <input
