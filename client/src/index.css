@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* container for each section */                                                                                                                                                                                                                      
+.container {
+  max-width: 1200px;
+}
