@@ -7,10 +7,9 @@ import axios from "../utils/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 
-
 const SignUp = () => {
   const [formData, setformData] = useState({});
-  const {loading, error} = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
 
   //redux
   const dispatch = useDispatch();
@@ -42,17 +41,14 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-     dispatch(signInStart());
+      dispatch(signInStart());
       const res = await axios.post("/auth/signin", formData);
-      console.log("User created successfully:", res.data);
-      // Optionally, redirect or show success message here
+      console.log("User signed in successfully:", res.data);
+      dispatch(signInSuccess(res.data));
       navigate("/");
-      dispatch(signInSuccess(res.data));
     } catch (err) {
-      const errorMsg = err.response?.data?.message || err.response?.data || err.message || "Signup failed";
+      const errorMsg = err.response?.data?.message || err.response?.data || err.message || "Signin failed";
       dispatch(signInFailure(errorMsg));
-    } finally {
-      dispatch(signInSuccess(res.data));
     }
   };
 
@@ -83,7 +79,6 @@ const SignUp = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-          
             <input
               type="email"
               placeholder="Email"
