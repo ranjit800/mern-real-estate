@@ -3,13 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import axios from "../utils/axios";
-// import axios from "axios";
+//redux
+import { useDispatch, useSelector } from "react-redux";
+import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 
 
 const SignUp = () => {
   const [formData, setformData] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const {loading, error} = useSelector((state) => state.user);
+
+  //redux
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -37,19 +41,18 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
+     dispatch(signInStart());
       const res = await axios.post("/auth/signin", formData);
       console.log("User created successfully:", res.data);
       // Optionally, redirect or show success message here
       navigate("/");
+      dispatch(signInSuccess(res.data));
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.response?.data || err.message || "Signup failed";
-      setError(errorMsg);
-      console.error("Signup error:", errorMsg);
+      dispatch(signInFailure(errorMsg));
     } finally {
-      setLoading(false);
+      dispatch(signInSuccess(res.data));
     }
   };
 
