@@ -2,10 +2,11 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, // This will be proxied to http://localhost:3000 via Vite
+  baseURL: 'http://localhost:3000/api', // This will be proxied to http://localhost:3000 via Vite
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // 🚨 REQUIRED to send/receive cookies
 });
 
 export default instance;

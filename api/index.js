@@ -23,9 +23,10 @@ const app = express();
 
 // ✅ Set up CORS for your frontend origin
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: 'http://localhost:5173',
   credentials: true,
 }));
+
 
 
 // ✅ Parse JSON bodies
