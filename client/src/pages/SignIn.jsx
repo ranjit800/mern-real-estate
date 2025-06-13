@@ -1,11 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import axios from "../utils/axios";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 const SignUp = () => {
   const [formData, setformData] = useState({});
@@ -115,9 +115,11 @@ const SignUp = () => {
 
           <div className="my-6 text-center text-slate-400">or continue with</div>
 
-          <button className="w-full flex items-center justify-center gap-2 border border-slate-600 py-3 rounded-lg text-slate-200 hover:bg-slate-700 transition">
+
+             <OAuth/>
+          {/* <button className="w-full flex items-center justify-center gap-2 border border-slate-600 py-3 rounded-lg text-slate-200 hover:bg-slate-700 transition">
             <FcGoogle className="text-xl" /> Continue with Google
-          </button>
+          </button> */}
         </div>
         {error && <p className="text-red-500 text-center mt-4">{error}</p>}
       </div>
