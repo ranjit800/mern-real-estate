@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.route.js";
 import dotenv from "dotenv";
 import cors from "cors"; // ✅ Import cors
 
+
 // ✅ Load environment variables
 dotenv.config();
 
@@ -31,6 +32,8 @@ app.use(cors({
 
 // ✅ Parse JSON bodies
 app.use(express.json());
+
+
 
 // Routes
 app.use("/api/user", userRouter);
