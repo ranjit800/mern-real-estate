@@ -399,18 +399,26 @@
 
 // export default Profile;
 
-import  { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { updateUserStart, updateUserSuccess, updateUserFailure } from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const Profile = () => {
   const fileRef = useRef(null);
-const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
 
-const [file, setFile] = useState(undefined);
-const [formData, setFormData] = useState({});
-const [uploading, setUploading] = useState(false); // new state for loader
-const [fileUploadError, setfileUploadError] = useState(false); // required!
+  const [file, setFile] = useState(undefined);
+  const [formData, setFormData] = useState({});
+  const dispatch = useDispatch();
+
+  const [uploading, setUploading] = useState(false); // new state for loader
+  const [fileUploadError, setfileUploadError] = useState(false); // required!
+
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+
+  console.log(formData);
 
   // Cloudinary config
   const cloudName = "mernrealestate"; // 👈 your Cloudinary cloud name
@@ -422,40 +430,63 @@ const [fileUploadError, setfileUploadError] = useState(false); // required!
     }
   }, [file]);
 
- const handleFileUplode = async (file) => {
-  const form = new FormData();
-  form.append("file", file);
-  form.append("upload_preset", uploadPreset);
+  //imgage uplode using cloudinary
 
-  try {
-    setUploading(true);
-    setfileUploadError(false);
+  const handleFileUplode = async (file) => {
+    const form = new FormData();
+    form.append("file", file);
+    form.append("upload_preset", uploadPreset);
 
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-      method: "POST",
-      body: form,
-    });
+    try {
+      setUploading(true);
+      setfileUploadError(false);
 
-    const data = await res.json();
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: "POST",
+        body: form,
+      });
 
-    if (data.secure_url) {
-      setFormData({ ...formData, avatar: data.secure_url });
-    } else {
-      throw new Error("Upload failed");
+      const data = await res.json();
+
+      if (data.secure_url) {
+        setFormData({ ...formData, avatar: data.secure_url });
+      } else {
+        throw new Error("Upload failed");
+      }
+    } catch (err) {
+      console.error("Cloudinary Upload Error:", err);
+      setfileUploadError(true);
+    } finally {
+      setUploading(false);
     }
-  } catch (err) {
-    console.error("Cloudinary Upload Error:", err);
-    setfileUploadError(true);
-  } finally {
-    setUploading(false);
-  }
-};
+  };
 
+  const handleChnage = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 🔁 Send `formData.avatar` and other info to backend here
-    console.log("Update payload:", formData);
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
   };
 
   return (
@@ -472,54 +503,71 @@ const [fileUploadError, setfileUploadError] = useState(false); // required!
             <input onChange={(e) => setFile(e.target.files[0])} type="file" ref={fileRef} hidden accept="image/*" />
 
             {/* Avatar */}
-            <div className="relative w-32 h-32 shrink-0">
+            <div className="relative w-32 h-32 shrink-0 group">
               <img
                 src={formData.avatar || currentUser?.avatar || "https://via.placeholder.com/100"}
                 alt="Profile"
-                className="w-full h-full object-cover rounded-full border-4 border-[#d1b989] shadow-lg cursor-pointer"
+                className="w-full h-full object-cover rounded-full border-4 border-[#d1b989] shadow-lg cursor-pointer transition-transform group-hover:scale-105"
               />
               <div
                 onClick={() => fileRef.current.click()}
-                className="absolute bottom-0 right-0 bg-[#d1b989] text-black text-xs px-2 py-1 rounded-full font-semibold shadow-md cursor-pointer"
+                className="absolute bottom-0 right-0 bg-[#d1b989] text-black text-xs px-2 py-1 rounded-full font-semibold shadow-md cursor-pointer hover:bg-[#b79e6a] transition-colors"
               >
-                Edit
+                {uploading ? (
+                  <span className="flex items-center gap-1">
+                    <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Uploading...
+                  </span>
+                ) : (
+                  "Edit"
+                )}
               </div>
+              {fileUploadError && <div className="absolute -bottom-8 left-0 right-0 text-red-500 text-xs text-center">Error uploading image</div>}
+
+              <div className="text-center mt-5 mb-5">
+              <p className="text-red-700 mt-5">{error ? error : ""}</p>
+              <p className="text-green-700 mt-5">{updateSuccess ? "User is updated successfully!" : ""}</p>
+            </div>
             </div>
 
-            {/* Upload progress */}
-            <p className="text-sm self-center">
-  {fileUploadError ? (
-    <span className="text-red-700">Error uploading image</span>
-  ) : uploading ? (
-    <span className="text-slate-400">Uploading...</span>
-  ) : (
-    ""
-  )}
-</p>
+            
 
             {/* Fields */}
-            <div className="w-full space-y-6">
+            <div className="w-full space-y-6 mt-5 md:mt-0">
               <div>
                 <label className="block mb-1 text-sm text-slate-300">Username</label>
-                <input type="text" defaultValue={currentUser?.username || ""} className="w-full px-5 py-3 rounded-lg bg-slate-700 bg-opacity-80" id="username" />
+                <input
+                  type="text"
+                  defaultValue={currentUser?.username || ""}
+                  className="w-full px-5 py-3 rounded-lg bg-slate-700 bg-opacity-80"
+                  id="username"
+                  onChange={handleChnage}
+                />
               </div>
 
               <div>
                 <label className="block mb-1 text-sm text-slate-300">Email</label>
-                <input type="email" defaultValue={currentUser?.email || ""} className="w-full px-5 py-3 rounded-lg bg-slate-700 bg-opacity-80" id="email" />
+                <input type="email" defaultValue={currentUser?.email || ""} className="w-full px-5 py-3 rounded-lg bg-slate-700 bg-opacity-80" id="email" onChange={handleChnage} />
               </div>
 
               <div>
                 <label className="block mb-1 text-sm text-slate-300">Password</label>
-                <input type="password" placeholder="••••••••" className="w-full px-5 py-3 rounded-lg bg-slate-700 bg-opacity-80" id="password" />
+                <input type="password" placeholder="••••••••" className="w-full px-5 py-3 rounded-lg bg-slate-700 bg-opacity-80" id="password" onChange={handleChnage} />
               </div>
             </div>
           </div>
 
           {/* Buttons */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button type="submit" className="w-full bg-[#d1b989] text-black py-3 rounded-xl font-semibold">
-              Update Profile
+            <button type="submit" disabled={loading} className="w-full bg-[#d1b989] text-black py-3 rounded-xl font-semibold">
+              {loading ? "Loading..." : "Update Profile"}
             </button>
             <Link to="/create-listing" className="w-full text-center bg-cyan-600 text-white py-3 rounded-xl font-semibold">
               Create Listing
