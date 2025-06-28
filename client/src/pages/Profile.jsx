@@ -223,6 +223,7 @@ const Profile = () => {
             <button type="submit" disabled={loading} className="w-full bg-[#d1b989] text-black py-3 rounded-xl font-semibold">
               {loading ? "Loading..." : "Update Profile"}
             </button>
+            
             <Link to="/create-listing" className="w-full text-center bg-cyan-600 text-white py-3 rounded-xl font-semibold">
               Create Listing
             </Link>
