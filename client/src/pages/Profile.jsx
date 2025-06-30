@@ -26,10 +26,10 @@ const Profile = () => {
   const [uploading, setUploading] = useState(false); // new state for loader
   const [fileUploadError, setfileUploadError] = useState(false); // required!
   const [updateSuccess, setUpdateSuccess] = useState(false);
-
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteInput, setDeleteInput] = useState("");
-
+  const [showListingsError, setShowListingsError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
   console.log(formData);
 
   // Cloudinary config
@@ -145,6 +145,22 @@ const Profile = () => {
     }
   };
 
+  const handleShowListings = async () => {
+    try {
+      setShowListingsError(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingsError(true);
+        return;
+      }
+
+      setUserListings(data);
+    } catch (error) {
+      setShowListingsError(true);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-10 text-white flex items-center justify-center">
       <div className="w-full max-w-4xl bg-slate-900 shadow-xl rounded-3xl p-8 md:p-12 border border-slate-700">
@@ -223,7 +239,7 @@ const Profile = () => {
             <button type="submit" disabled={loading} className="w-full bg-[#d1b989] text-black py-3 rounded-xl font-semibold">
               {loading ? "Loading..." : "Update Profile"}
             </button>
-            
+
             <Link to="/create-listing" className="w-full text-center bg-cyan-600 text-white py-3 rounded-xl font-semibold">
               Create Listing
             </Link>
@@ -280,10 +296,36 @@ const Profile = () => {
             Sign Out
           </button>
 
-          <Link to="/my-listings" className="text-cyan-400 hover:text-cyan-300 transition">
+          <button onClick={handleShowListings} className="text-green-700 ">
             Show My Listings
-          </Link>
+          </button>
         </div>
+        <p className="text-red-700 mt-5">{showListingsError ? "Error showing listings" : ""}</p>
+
+        {userListings && userListings.length > 0 && (
+          <div className="flex flex-col gap-4">
+            <h1 className="text-center mt-7 text-2xl font-semibold">Your Listings</h1>
+            {userListings.map((listing) => (
+              <div key={listing._id} className="border rounded-lg p-3 flex justify-between items-center gap-4">
+                <Link to={`/listing/${listing._id}`}>
+                  <img src={listing.imageUrls[0]} alt="listing cover" className="h-16 w-16 object-contain" />
+                </Link>
+                <Link className="text-slate-700 font-semibold  hover:underline truncate flex-1" to={`/listing/${listing._id}`}>
+                  <p>{listing.name}</p>
+                </Link>
+
+                <div className="flex flex-col item-center">
+                  <button  className="text-red-700 uppercase">
+                    Delete
+                  </button>
+                  <Link >
+                    <button className="text-green-700 uppercase">Edit</button>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
