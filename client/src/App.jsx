@@ -10,6 +10,7 @@ import NotFound from "./components/NotFound";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/updateListing";
+import Listing from "./pages/Listing";
 
 const App = () => {
   return (
@@ -20,6 +21,8 @@ const App = () => {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<Signin />} />
         <Route path="/about" element={<About />} />
+        <Route path="/listing/:listingId" element={<Listing />} />
+
         
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
