@@ -11,6 +11,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/updateListing";
 import Listing from "./pages/Listing";
+import Seacrh from "./pages/Seacrh";
 
 const App = () => {
   return (
@@ -22,6 +23,8 @@ const App = () => {
         <Route path="/sign-in" element={<Signin />} />
         <Route path="/about" element={<About />} />
         <Route path="/listing/:listingId" element={<Listing />} />
+        <Route path="/search" element={<Seacrh />} />
+
 
         
         <Route element={<PrivateRoute />}>
