@@ -1,4 +1,3 @@
-
 import express from "express";
 import mongoose from "mongoose";
 import userRouter from "./routes/user.route.js";
@@ -6,7 +5,10 @@ import authRouter from "./routes/auth.route.js";
 import dotenv from "dotenv";
 import cors from "cors"; // ✅ Import cors
 import cookieParser from "cookie-parser";
-import listingRouter from "./routes/listing.route.js"
+import listingRouter from "./routes/listing.route.js";
+//deploy setup
+import path from "path";
+
 // ✅ Load environment variables
 dotenv.config();
 
@@ -20,28 +22,35 @@ mongoose
     console.log(err);
   });
 
+//deploy setup
+const __dirname = path.resolve();
+
 const app = express();
 
 // ✅ Set up CORS for your frontend origin
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-}));
-
-
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // ✅ Parse JSON bodies
 app.use(express.json());
 
 app.use(cookieParser());
 
-
-
 // Routes
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 
+//deploy setup
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+})
 
 
 
