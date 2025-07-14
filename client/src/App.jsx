@@ -9,7 +9,7 @@ import Footer from "./components/Footer";
 import NotFound from "./components/NotFound";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateListing from "./pages/CreateListing";
-import UpdateListing from "./pages/updateListing";
+import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
 import Seacrh from "./pages/Seacrh";
 import ContactUs from "./pages/ContactUs";
