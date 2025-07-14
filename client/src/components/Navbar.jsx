@@ -78,7 +78,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/listing" className="hover:text-[#d1b989] transition duration-200">
+            <Link to="/search" className="hover:text-[#d1b989] transition duration-200">
               Listing
             </Link>
           </li>

@@ -12,27 +12,28 @@ import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/updateListing";
 import Listing from "./pages/Listing";
 import Seacrh from "./pages/Seacrh";
+import ContactUs from "./pages/ContactUs";
+import Services from "./pages/Services";
 
 const App = () => {
   return (
     <div className="bg-[#06101e]">
-    {/* // <div className="bg-[#f3f0eb]"> */}
+      {/* // <div className="bg-[#f3f0eb]"> */}
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<Signin />} />
         <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
         <Route path="/listing/:listingId" element={<Listing />} />
         <Route path="/search" element={<Seacrh />} />
+        <Route path="/contact" element={<ContactUs />} />
 
-
-        
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-listing" element={<CreateListing />} />
           <Route path="/update-listing/:listingId" element={<UpdateListing />} />
-
         </Route>
 
         {/* <Route path="*" element={<NotFound />} /> */}
