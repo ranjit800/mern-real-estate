@@ -49,7 +49,7 @@
 // export default Footer;
 
 import { Link } from "react-router-dom";
-import logo from "../assets/Images/Logo3.png";
+import logo from "../assets/Images/logoFooter.png";
 import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 import bg from '../assets/Images/footer-bg.png'
 
