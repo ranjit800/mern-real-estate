@@ -2,7 +2,7 @@ import { FaSearch } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import logo from "../assets/Images/Logo3.png";
+import logo from "../assets/Images/logoFooter.png";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
