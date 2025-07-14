@@ -7,3 +7,13 @@
 .container {
   max-width: 1200px;
 }
+
+
+.swiper {
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+.swiper-slide {
+  transition: all 0.3s ease-in-out;
+}

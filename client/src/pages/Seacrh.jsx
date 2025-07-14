@@ -334,28 +334,42 @@ export default function Search() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row bg-gradient-to-br from-slate-900 to-slate-800 text-white min-h-screen">
+    <div className="flex flex-col md:flex-row text-white min-h-screen ">
       {/* Sidebar */}
-      <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen w-full md:w-96 bg-slate-900 border-slate-700">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <div className="flex flex-col gap-1">
-            <label className="font-medium text-slate-300">Search Term:</label>
+      <div className="p-7 md:pt-28 pt-0 border-b-2 md:border-r-2 md:min-h-screen w-full md:w-96 bg-[#CACFCC] border-slate-200 md:sticky md:top-0 md:h-screen shadow-xl">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold text-[#23272f] text-base tracking-wide mb-1">Search Term</label>
             <input
               type="text"
               id="searchTerm"
-              placeholder="Search..."
-              className="bg-slate-800 text-white p-3 rounded-lg border border-slate-600 placeholder:text-slate-400"
+              placeholder="Search properties, locations..."
+              className="bg-white text-[#23272f] p-3 rounded-xl border border-[#e0e0e0] focus:border-[#d1b989] focus:ring-2 focus:ring-[#d1b989]/30 placeholder:text-[#b0b0b0] transition"
               value={sidebardata.searchTerm}
               onChange={handleChange}
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="font-medium text-slate-300">Type:</label>
+            <label className="font-semibold text-[#23272f] text-base tracking-wide mb-1">Type</label>
             <div className="flex flex-wrap gap-4">
               {["all", "rent", "sale"].map((type) => (
-                <label key={type} className="flex items-center gap-2 text-sm">
-                  <input type="checkbox" id={type} checked={sidebardata.type === type} onChange={handleChange} className="accent-[#d1b989] w-4 h-4" />
+                <label
+                  key={type}
+                  className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg cursor-pointer border transition
+                    ${
+                      sidebardata.type === type
+                        ? "bg-[#d1b989]/20 border-[#d1b989] text-[#8f6841] font-bold"
+                        : "bg-white border-[#e0e0e0] text-[#23272f] hover:border-[#d1b989]/60"
+                    }`}
+                >
+                  <input
+                    type="checkbox"
+                    id={type}
+                    checked={sidebardata.type === type}
+                    onChange={handleChange}
+                    className="accent-[#d1b989] w-4 h-4"
+                  />
                   {type === "all" ? "Rent & Sale" : type.charAt(0).toUpperCase() + type.slice(1)}
                 </label>
               ))}
@@ -363,36 +377,93 @@ export default function Search() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="font-medium text-slate-300">Amenities:</label>
+            <label className="font-semibold text-[#23272f] text-base tracking-wide mb-1">Amenities</label>
             <div className="flex flex-wrap gap-4">
               {["parking", "furnished", "offer"].map((amenity) => (
-                <label key={amenity} className="flex items-center gap-2 text-sm">
-                  <input type="checkbox" id={amenity} checked={sidebardata[amenity]} onChange={handleChange} className="accent-[#d1b989] w-4 h-4" />
+                <label
+                  key={amenity}
+                  className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg cursor-pointer border transition
+                    ${
+                      sidebardata[amenity]
+                        ? "bg-[#d1b989]/20 border-[#d1b989] text-[#8f6841] font-bold"
+                        : "bg-white border-[#e0e0e0] text-[#23272f] hover:border-[#d1b989]/60"
+                    }`}
+                >
+                  <input
+                    type="checkbox"
+                    id={amenity}
+                    checked={sidebardata[amenity]}
+                    onChange={handleChange}
+                    className="accent-[#d1b989] w-4 h-4"
+                  />
                   {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
                 </label>
               ))}
             </div>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="font-medium text-slate-300">Sort By:</label>
-            <select id="sort_order" onChange={handleChange} defaultValue="createdAt_desc" className="bg-slate-800 text-white border border-slate-600 p-3 rounded-lg">
-              <option value="regularPrice_desc">Price high to low</option>
-              <option value="regularPrice_asc">Price low to high</option>
-              <option value="createdAt_desc">Latest</option>
-              <option value="createdAt_asc">Oldest</option>
-            </select>
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold text-[#23272f] text-base tracking-wide mb-1">Sort By</label>
+            <div className="relative">
+              <select
+                id="sort_order"
+                onChange={handleChange}
+                defaultValue="createdAt_desc"
+                className="appearance-none bg-white text-[#23272f] border border-[#e0e0e0] p-3 rounded-xl focus:border-[#d1b989] focus:ring-2 focus:ring-[#d1b989]/30 transition w-full pr-10 font-medium shadow-sm hover:border-[#d1b989]/80 cursor-pointer"
+                style={{
+                  backgroundImage:
+                    "url(\"data:image/svg+xml,%3Csvg width='16' height='16' fill='none' stroke='%238f6841' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\")",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 1rem center",
+                  backgroundSize: "1.25em 1.25em",
+                }}
+              >
+                <option
+                  value="regularPrice_desc"
+                  className="bg-[#f8f6f2] text-[#8f6841] font-semibold hover:bg-[#d1b989]/30 hover:text-[#23272f] py-2"
+                >
+                  Price high to low
+                </option>
+                <option
+                  value="regularPrice_asc"
+                  className="bg-[#f8f6f2] text-[#8f6841] font-semibold hover:bg-[#d1b989]/30 hover:text-[#23272f] py-2"
+                >
+                  Price low to high
+                </option>
+                <option
+                  value="createdAt_desc"
+                  className="bg-[#f8f6f2] text-[#8f6841] font-semibold hover:bg-[#d1b989]/30 hover:text-[#23272f] py-2"
+                >
+                  Latest
+                </option>
+                <option
+                  value="createdAt_asc"
+                  className="bg-[#f8f6f2] text-[#8f6841] font-semibold hover:bg-[#d1b989]/30 hover:text-[#23272f] py-2"
+                >
+                  Oldest
+                </option>
+              </select>
+              {/* Custom dropdown arrow for better appearance */}
+              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                <svg width="20" height="20" fill="none" stroke="#8f6841" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </div>
+            </div>
           </div>
 
-          <button type="submit" className="bg-[#d1b989] text-black p-3 rounded-lg uppercase font-semibold hover:bg-[#bfa76a] transition">
+          <button
+            type="submit"
+            className="bg-[#d1b989] text-[#23272f] p-3 rounded-xl uppercase font-semibold shadow-md hover:bg-[#bfa76a] hover:text-white transition tracking-wide"
+          >
             Search
           </button>
         </form>
       </div>
 
       {/* Listings Section */}
-      <div className="flex-1 p-6">
-        <h1 className="text-3xl font-bold mb-6 text-[#d1b989]">Listing Results:</h1>
+      <div className="flex-1 p-6 min-h-screen py-20">
+        <h1 className="text-3xl font-bold mb-6 text-[#8f6841]">Listing Results:</h1>
 
         <div className="flex flex-wrap gap-6">
           {loading ? (
@@ -403,13 +474,15 @@ export default function Search() {
             listings.map((listing) => <ListingItem key={listing._id} listing={listing} />)
           )}
 
-            {showMore && (
-            <button
-              onClick={onShowMoreClick}
-              className='text-green-700 hover:underline p-7 text-center w-full'
-            >
-              Show more
-            </button>
+          {showMore && (
+            <div className="w-full flex justify-center">
+              <button
+                onClick={onShowMoreClick}
+                className='text-green-700 hover:underline p-7 text-center w-full max-w-xs'
+              >
+                Show more
+              </button>
+            </div>
           )}
         </div>
       </div>

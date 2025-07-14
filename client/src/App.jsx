@@ -15,7 +15,8 @@ import Seacrh from "./pages/Seacrh";
 
 const App = () => {
   return (
-    <div className="bg-[#0f172a]">
+    <div className="bg-[#06101e]">
+    {/* // <div className="bg-[#f3f0eb]"> */}
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

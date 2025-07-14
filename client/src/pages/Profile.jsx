@@ -181,7 +181,7 @@ const Profile = () => {
     }
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-10 text-white flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-20 text-white flex items-center justify-center">
       <div className="w-full max-w-4xl bg-slate-900 shadow-xl rounded-3xl p-8 md:p-12 border border-slate-700">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-[#d1b989]">My Profile</h1>
