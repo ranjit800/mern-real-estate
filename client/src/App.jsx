@@ -36,7 +36,7 @@ const App = () => {
           <Route path="/update-listing/:listingId" element={<UpdateListing />} />
         </Route>
 
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </div>
@@ -44,3 +44,5 @@ const App = () => {
 };
 
 export default App;
+
+
